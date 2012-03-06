@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="uLogin" title="Авторизация через сервис uLogin.ru" version_string="1.0" version_id="1" url="http://ulogin.ru" install_callback_class="uLogin_Installer" install_callback_method="install" uninstall_callback_class="uLogin_Installer" uninstall_callback_method="uninstall">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates/>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="load_class_controller" execute_order="10" callback_class="uLogin_Listener_LoadClassController" callback_method="loadClassListener" active="1" description="uLogin loadClass Listener for ControllerAdmin_User"/>
+    <listener event_id="template_create" execute_order="10" callback_class="uLogin_Listener_Template" callback_method="createTemplate" active="1" description="uLogin preload template"/>
+    <listener event_id="template_hook" execute_order="10" callback_class="uLogin_Listener_Template" callback_method="templateHook" active="1" description="uLogin insert template"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <optiongroups>
+    <group group_id="uloginOptions" display_order="111" debug_only="0"/>
+    <option option_id="ulogin_enable" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value>1</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="uloginOptions" display_order="1"/>
+    </option>
+    <option option_id="ulogin_hidden_providers" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value>twitter,google,yandex,livejournal,openid</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="uloginOptions" display_order="30"/>
+    </option>
+    <option option_id="ulogin_shown_providers" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value>vkontakte,odnoklassniki,mailru,facebook</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="uloginOptions" display_order="20"/>
+    </option>
+    <option option_id="ulogin_xf_register" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value></default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="uloginOptions" display_order="10"/>
+    </option>
+  </optiongroups>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="option_group_uloginOptions" version_id="1" version_string="1.0"><![CDATA[uLogin]]></phrase>
+    <phrase title="option_group_uloginOptions_description" version_id="1" version_string="1.0"><![CDATA[Настройки  дополнения: uLogin]]></phrase>
+    <phrase title="option_ulogin_enable" version_id="1" version_string="1.0"><![CDATA[Включение/отключение виджета]]></phrase>
+    <phrase title="option_ulogin_enable_explain" version_id="1" version_string="1.0"><![CDATA[]]></phrase>
+    <phrase title="option_ulogin_hidden_providers" version_id="1" version_string="1.0"><![CDATA[Скрытые сервисы в дропдаун меню]]></phrase>
+    <phrase title="option_ulogin_hidden_providers_explain" version_id="1" version_string="1.0"><![CDATA[]]></phrase>
+    <phrase title="option_ulogin_shown_providers" version_id="1" version_string="1.0"><![CDATA[Отображаемые сервисы на панели]]></phrase>
+    <phrase title="option_ulogin_shown_providers_explain" version_id="1" version_string="1.0"><![CDATA[]]></phrase>
+    <phrase title="option_ulogin_xf_register" version_id="1" version_string="1.0"><![CDATA[Политика регистрации]]></phrase>
+    <phrase title="option_ulogin_xf_register_explain" version_id="1" version_string="1.0"><![CDATA[]]></phrase>
+  </phrases>
+  <route_prefixes>
+    <route_type type="public">
+      <prefix original_prefix="ulogin" class="uLogin_RoutePrefix_Index" build_link="all"/>
+    </route_type>
+  </route_prefixes>
+  <style_properties/>
+  <templates>
+    <template title="ulogin" version_id="1" version_string="1.0"><![CDATA[<xen:require css="ulogin.css" />
+<xen:if is="{$xenOptions.ulogin_enable.enabled}">
+<h3 id="uLoginBar">
+<div id="uLogin" x-ulogin-params="display=small&fields=first_name,last_name,photo,email&optional=sex,bdate,country,city&providers={$xenOptions.ulogin_shown_providers}&hidden={$xenOptions.ulogin_hidden_providers}&redirect_uri={$redirect_uri}"></div>
+<script src="http://ulogin.ru/js/ulogin.js"></script>
+</h3>
+</xen:if>]]></template>
+    <template title="ulogin.css" version_id="1" version_string="1.0"><![CDATA[#loginBar #uLoginBar
+{
+	@property "uLoginBar";
+	font-size: 11px;
+	color: #f0f7fc;
+	background-color: #032A46;
+	padding: 0 10px;
+	margin-right: 20px;
+	border-bottom-right-radius: 10px; -webkit-border-bottom-right-radius:  10px; -moz-border-radius-bottomright:  10px; -khtml-border-bottom-right-radius:  10px;
+	border-bottom-left-radius: 10px; -webkit-border-bottom-left-radius:  10px; -moz-border-radius-bottomleft:  10px; -khtml-border-bottom-left-radius:  10px;
+	position: absolute;
+	right: 200px;
+	bottom: -20px;
+	text-align: center;
+	z-index: 1;
+	box-shadow: 0px 2px 5px #032A46; -webkit-box-shadow: 0px 2px 5px #032A46; -moz-box-shadow: 0px 2px 5px #032A46; -khtml-box-shadow: 0px 2px 5px #032A46;
+	@property "/uLoginBar";
+}
+
+#loginBar #uLoginBar #uLogin
+{
+	@property "uLoginBar";
+	margin-top: 20px;
+	@property "/uLoginBar";
+}]]></template>
+  </templates>
+</addon>
