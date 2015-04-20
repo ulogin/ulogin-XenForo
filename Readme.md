@@ -17,13 +17,13 @@ License: GNU General Public License, version 2
 - Для отображения виджета на главной странице необходимо исправить шаблон login_bar следующим образом:
 Найти строку:
 
-		`<h3 id="loginBarHandle">
+		<h3 id="loginBarHandle">
 			<label for="LoginControl"><a href="{xen:link login}" class="concealed noOutline">{xen:if $xenOptions.registrationSetup.enabled, {xen:phrase log_in_or_sign_up}, {xen:phrase log_in}}</a></label>
-		</h3>`
+		</h3>
 
 Ниже добавить:
 
-	`<xen:hook name="ulogin"></xen:hook>`
+	<xen:hook name="ulogin"></xen:hook>
 
 Шаблон можно редактировать через административную панель.
 
@@ -67,36 +67,36 @@ License: GNU General Public License, version 2
 
 Для ручного вывода панели авторизации в любом месте шаблона XenForo используйте хук(hook)
 
-	`<xen:hook name="ulogin"></xen:hook>`
+	<xen:hook name="ulogin"></xen:hook>
 
 **Внимание! по умолчанию передаётся uloginID общей формы**
 
 Для использования панели авторизации в контроллерах XenForo используйте код функции
 
-	`XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode();`
+	XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode();
 
 Например,
 
-	`$panel = XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode(0);`
+	$panel = XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode(0);
 
 При этом необходимо передать переменную $panel в параметры шаблона, нарпимер,
 
-	`$templateParams += array('panel' => $panel);`
+	$templateParams += array('panel' => $panel);
 
 и вывести переменную в самом шаблоне, например,
 
-	`{xen:raw $panel}`
+	{xen:raw $panel}
 
 Функция getPanelCode класса uLogin_Model_uLoginModel
 
-	`uLogin_Model_uLoginModel::getPanelCode($place = 0)
+	uLogin_Model_uLoginModel::getPanelCode($place = 0)
 	/**
 	* int $place - указывает, какую форму виджета необходимо выводить (0 - общая форма, 1 - форма синхронизации). Значение по умолчанию = 0.
-	*/`
+	*/
 
 Для вывода списка аккаунтов пользователя используйте функцию
 
-	`uLogin_Listener_Profile::getuLoginUserAccountsPanel()`
+	uLogin_Listener_Profile::getuLoginUserAccountsPanel()
 
 ## Изменения
 
