@@ -253,10 +253,16 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 				}
 
 				$ul_writer = uLogin_DataWriter_User::create('uLogin_DataWriter_User');
-				$ul_writer->set('userid', $user_id);
+				$ul_writer->set('userid', $user_id['user_id']);
 				$ul_writer->set('identity', $u_user['identity']);
 				$ul_writer->set('network', $u_user['network']);
 				$ul_writer->save();
+				$userModel = $this->_getUserModel();
+				XenForo_Model_Ip::log($user_id['user_id'], 'user', $user_id['user_id'], 'login');
+				$userModel->deleteSessionActivity(0, $this->_request->getClientIp(false));
+				$session = XenForo_Application::get('session');
+				$session->changeUserId($user_id['user_id']);
+				XenForo_Visitor::setup($user_id['user_id']);
 				return $user_id;
 			}
 		}
