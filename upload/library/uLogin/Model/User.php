@@ -35,9 +35,5 @@ class uLogin_Model_User extends XenForo_Model{
     public function getAllUsersById($user_id){
         return $this->fetchAllKeyed('SELECT * FROM xf_ulogin_users  WHERE  userid= '.$user_id,'');
     }
-
-    public function getGroupIdByTitle($title){
-        return  $this->_getDb()->fetchRow('SELECT user_group_id FROM xf_user_group  WHERE  title = ?', $title);
-    }
 }
 ?>

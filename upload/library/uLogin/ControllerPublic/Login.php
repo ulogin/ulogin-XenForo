@@ -4,7 +4,6 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 
 	public function actionLogin()
 	{
-
 		if (isset($_POST['identity']))
 		{
 			$visitor = XenForo_Visitor::getInstance();
@@ -46,8 +45,6 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 		else
 			$user_id = $this->uloginRegistrationUser($u_user);
 		if ($user_id > 0) $this->loginCustomer($u_user, $user_id);
-//        if (Tools::getValue('err'))
-//            $this->context->smarty->assign('ulogin_message', Tools::getValue('err'));
 		return true;
 	}
 
@@ -221,10 +218,15 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 			$ul_writer->set('identity', $u_user['identity']);
 			$ul_writer->set('network', $u_user['network']);
 			$ul_writer->save();
+
 			XenForo_Model_Ip::log($user['user_id'], 'user', $user['user_id'], 'register');
 			XenForo_Application::get('session')->changeUserId($user['user_id']);
 			XenForo_Visitor::setup($user['user_id']);
-//			//отправляем письмо при регистрации если в настройках указано
+
+			if(XenForo_Application::getOptions()->uLoginEmail == 1) {
+				$this->sendEmail($user);
+			}
+
 			if (isset($u_user['photo'])) $u_user['photo'] = $u_user['photo'] === "https://ulogin.ru/img/photo.png" ? '' : $u_user['photo'];
 			if (isset($u_user['photo_big'])) $u_user['photo_big'] = $u_user['photo_big'] === "https://ulogin.ru/img/photo_big.png" ? '' : $u_user['photo_big'];
 			$this->_uploadAvatar((isset($u_user['photo_big']) and !empty($u_user['photo_big'])) ? $u_user['photo_big'] : ((isset($u_user['photo']) and !empty($u_user['photo'])) ? $u_user['photo'] : ''));
@@ -257,6 +259,7 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 				$ul_writer->set('identity', $u_user['identity']);
 				$ul_writer->set('network', $u_user['network']);
 				$ul_writer->save();
+
 				$userModel = $this->_getUserModel();
 				XenForo_Model_Ip::log($user_id['user_id'], 'user', $user_id['user_id'], 'login');
 				$userModel->deleteSessionActivity(0, $this->_request->getClientIp(false));
@@ -269,61 +272,14 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 		return false;
 	}
 
-	protected function _sendEmail(array $user, array $email, Zend_Mail_Transport_Abstract $transport)
+	/**
+	 * Отправка письма на почту при регистрации с паролем и логином
+	 */
+
+	protected function sendEmail($user)
 	{
-		if (!$user['email'])
-		{
-			return false;
-		}
-		if (!XenForo_Application::get('config')->enableMail)
-		{
-			return true;
-		}
-		$options = XenForo_Application::getOptions();
-		XenForo_Db::ping();
-		$mailObj = new Zend_Mail('utf-8');
-		$mailObj->setSubject($email['email_title'])->addTo($user['email'], $user['username'])->setFrom($email['from_email'], $email['from_name']);
-		$bounceEmailAddress = $options->bounceEmailAddress;
-		if (!$bounceEmailAddress)
-		{
-			$bounceEmailAddress = $options->defaultEmailAddress;
-		}
-		$toEmail = $user['email'];
-		$bounceHmac = substr(hash_hmac('md5', $toEmail, XenForo_Application::getConfig()->globalSalt), 0, 8);
-		$mailObj->addHeader('X-To-Validate', "$bounceHmac+$toEmail");
-		if ($options->enableVerp)
-		{
-			$verpValue = str_replace('@', '=', $toEmail);
-			$bounceEmailAddress = str_replace('@', "+$bounceHmac+$verpValue@", $bounceEmailAddress);
-		}
-		$mailObj->setReturnPath($bounceEmailAddress);
-		if ($email['email_format'] == 'html')
-		{
-			$replacements = array('{name}' => htmlspecialchars($user['username']), '{email}' => htmlspecialchars($user['email']), '{id}' => $user['user_id']);
-			$email['email_body'] = strtr($email['email_body'], $replacements);
-			$text = trim(htmlspecialchars_decode(strip_tags($email['email_body'])));
-			$mailObj->setBodyHtml($email['email_body'])->setBodyText($text);
-		}
-		else
-		{
-			$replacements = array('{name}' => $user['username'], '{email}' => $user['email'], '{id}' => $user['user_id']);
-			$email['email_body'] = strtr($email['email_body'], $replacements);
-			$mailObj->setBodyText($email['email_body']);
-		}
-		if (!$mailObj->getMessageId())
-		{
-			$mailObj->setMessageId();
-		}
-		$thisTransport = XenForo_Mail::getFinalTransportForMail($mailObj, $transport);
-		try
-		{
-			$mailObj->send($thisTransport);
-		} catch (Exception $e)
-		{
-			XenForo_Error::logException($e, false, "Email to $user[email] failed: ");
-			return false;
-		}
-		return true;
+		$uLoginModel = XenForo_Model_User::create('XenForo_Model_UserConfirmation');
+		$userId = $uLoginModel->resetPassword($user);
 	}
 
 	/**

@@ -8,7 +8,7 @@ class uLogin_Listener_Profile {
 		{
 			$paths = XenForo_Application::get('requestPaths');
 			$params = $template->getParams();
-			$panel = XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode(1);
+			$panel = XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode();
 			$params += array('panel' => $panel);
 			$mergedParams = array_merge($params, $hookParams);
 			$uLoginTemplate = $template->create('ulogin', $mergedParams);
@@ -25,10 +25,10 @@ class uLogin_Listener_Profile {
 			global $fileDir;
 			$visitor = XenForo_Visitor::getInstance();
 			$current_user = $visitor['user_id'];
-			$panel = XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode();
+			$panel = XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode(1);
 			if ($current_user > 0)
 			{
-				$syncpanel = uLogin_Listener_Profile::getuloginUserAccountsPanel();
+				$syncpanel = uLogin_Listener_Profile::getuLoginUserAccountsPanel();
 				$oldcontents = $contents;
 				$contents = '
 <link type="text/css" rel="stylesheet" href="https://ulogin.ru/css/providers.css">
@@ -59,7 +59,7 @@ class uLogin_Listener_Profile {
 	 *
 	 * @return string
 	 */
-	static function getuloginUserAccountsPanel($user_id = 0)
+	static function getuLoginUserAccountsPanel($user_id = 0)
 	{
 		$visitor = XenForo_Visitor::getInstance();
 		$current_user = $visitor['user_id'];
