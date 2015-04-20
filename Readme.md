@@ -17,9 +17,9 @@ License: GNU General Public License, version 2
 - Для отображения виджета на главной странице необходимо исправить шаблон login_bar следующим образом:
 Найти строку:
 
-	`<h3 id="loginBarHandle">
-		<label for="LoginControl"><a href="{xen:link login}" class="concealed noOutline">{xen:if $xenOptions.registrationSetup.enabled, {xen:phrase log_in_or_sign_up}, {xen:phrase log_in}}</a></label>
-	</h3>`
+		`<h3 id="loginBarHandle">
+			<label for="LoginControl"><a href="{xen:link login}" class="concealed noOutline">{xen:if $xenOptions.registrationSetup.enabled, {xen:phrase log_in_or_sign_up}, {xen:phrase log_in}}</a></label>
+		</h3>`
 
 Ниже добавить:
 
