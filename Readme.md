@@ -87,7 +87,7 @@ License: GNU General Public License, version 2
 
 	`{xen:raw $panel}`
 
-
+Функция getPanelCode класса uLogin_Model_uLoginModel
 
 	`uLogin_Model_uLoginModel::getPanelCode($place = 0)
 	/**
