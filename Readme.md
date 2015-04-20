@@ -15,15 +15,15 @@ License: GNU General Public License, version 2
 - Скопировать все файлы и папки находящиеся в папке /upload в архиве в папку с xenForo (forum/library/uLogin/ и forum/js/uLogin/).
 - Через административную панель установить дополнение. Для этого необходимо в открытом пункте меню "Install Add-on"  указать путь до файла addon-ulogin.xml(содержится в корне архива с дополнением).
 - Для отображения виджета на главной странице необходимо исправить шаблон login_bar следующим образом:
-	Найти строку:
+Найти строку:
 
-		`<h3 id="loginBarHandle">
-			<label for="LoginControl"><a href="{xen:link login}" class="concealed noOutline">{xen:if $xenOptions.registrationSetup.enabled, {xen:phrase log_in_or_sign_up}, {xen:phrase log_in}}</a></label>
-		</h3>`
+	`<h3 id="loginBarHandle">
+		<label for="LoginControl"><a href="{xen:link login}" class="concealed noOutline">{xen:if $xenOptions.registrationSetup.enabled, {xen:phrase log_in_or_sign_up}, {xen:phrase log_in}}</a></label>
+	</h3>`
 
-	Ниже добавить:
+Ниже добавить:
 
-		`<xen:hook name="ulogin"></xen:hook>`
+	`<xen:hook name="ulogin"></xen:hook>`
 
 Шаблон можно редактировать через административную панель.
 
@@ -69,21 +69,21 @@ License: GNU General Public License, version 2
 
 	`<xen:hook name="ulogin"></xen:hook>`
 
-	**Внимание! по умолчанию передаётся uloginID общей формы**
+**Внимание! по умолчанию передаётся uloginID общей формы**
 
 Для использования панели авторизации в контроллерах XenForo используйте код функции
 
 	`XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode();`
 
-	Например,
+Например,
 
 	`$panel = XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode(0);`
 
-	При этом необходимо передать переменную $panel в параметры шаблона, нарпимер,
+При этом необходимо передать переменную $panel в параметры шаблона, нарпимер,
 
 	`$templateParams += array('panel' => $panel);`
 
-	и вывести переменную в самом шаблоне, например,
+и вывести переменную в самом шаблоне, например,
 
 	`{xen:raw $panel}`
 
