@@ -88,6 +88,7 @@ License: GNU General Public License, version 2
 	`{xen:raw $panel}`
 
 
+
 	`uLogin_Model_uLoginModel::getPanelCode($place = 0)
 	/**
 	* int $place - указывает, какую форму виджета необходимо выводить (0 - общая форма, 1 - форма синхронизации). Значение по умолчанию = 0.
