@@ -1,42 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="uLogin" title="Авторизация через сервис uLogin.ru" version_string="1.0" version_id="1" url="http://ulogin.ru" install_callback_class="uLogin_Installer" install_callback_method="install" uninstall_callback_class="uLogin_Installer" uninstall_callback_method="uninstall">
+<addon addon_id="ulogin" title="uLogin" version_string="2.0.0" version_id="2" url="http://ulogin.ru" install_callback_class="uLogin_Installer" install_callback_method="install" uninstall_callback_class="uLogin_Installer" uninstall_callback_method="uninstall">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
   <admin_templates/>
+  <admin_template_modifications/>
   <code_events/>
   <code_event_listeners>
-    <listener event_id="load_class_controller" execute_order="10" callback_class="uLogin_Listener_LoadClassController" callback_method="loadClassListener" active="1" description="uLogin loadClass Listener for ControllerAdmin_User"/>
-    <listener event_id="template_create" execute_order="10" callback_class="uLogin_Listener_Template" callback_method="createTemplate" active="1" description="uLogin preload template"/>
-    <listener event_id="template_hook" execute_order="10" callback_class="uLogin_Listener_Template" callback_method="templateHook" active="1" description="uLogin insert template"/>
+    <listener event_id="load_class_controller" execute_order="10" callback_class="uLogin_Listener_LoadClassController" callback_method="loadClassListener" active="1" hint="" description="uLogin loadClass Listener for ControllerAdmin_User"/>
+    <listener event_id="template_create" execute_order="10" callback_class="uLogin_Listener_Template" callback_method="createTemplate" active="1" hint="" description="uLogin preload template"/>
+    <listener event_id="template_hook" execute_order="10" callback_class="uLogin_Listener_Profile" callback_method="template_profile" active="1" hint="" description="uLogin Profile insert template"/>
   </code_event_listeners>
   <cron/>
   <email_templates/>
+  <email_template_modifications/>
   <optiongroups>
-    <group group_id="uloginOptions" display_order="111" debug_only="0"/>
-    <option option_id="ulogin_enable" edit_format="onoff" data_type="boolean" can_backup="1">
-      <default_value>1</default_value>
+    <group group_id="uloginDefaultOptions" display_order="2" debug_only="0"/>
+    <group group_id="uloginOptions" display_order="2" debug_only="0"/>
+    <option option_id="uLoginID2" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value></default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="uloginOptions" display_order="2"/>
+    </option>
+    <option option_id="uloginID1" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value></default_value>
       <edit_format_params></edit_format_params>
       <sub_options></sub_options>
       <relation group_id="uloginOptions" display_order="1"/>
     </option>
-    <option option_id="ulogin_hidden_providers" edit_format="textbox" data_type="string" can_backup="1">
-      <default_value>twitter,google,yandex,livejournal,openid</default_value>
+    <option option_id="ulogin_display" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value>small</default_value>
       <edit_format_params></edit_format_params>
       <sub_options></sub_options>
-      <relation group_id="uloginOptions" display_order="30"/>
+      <relation group_id="uloginDefaultOptions" display_order="0"/>
+    </option>
+    <option option_id="ulogin_fields" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value>first_name,last_name,email,photo,photo_big</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="uloginDefaultOptions" display_order="3"/>
+    </option>
+    <option option_id="ulogin_hidden_providers" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value>other</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="uloginDefaultOptions" display_order="2"/>
+    </option>
+    <option option_id="ulogin_optional" edit_format="textbox" data_type="string" can_backup="1">
+      <default_value>sex,bdate,country,city</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="uloginDefaultOptions" display_order="4"/>
     </option>
     <option option_id="ulogin_shown_providers" edit_format="textbox" data_type="string" can_backup="1">
       <default_value>vkontakte,odnoklassniki,mailru,facebook</default_value>
       <edit_format_params></edit_format_params>
       <sub_options></sub_options>
-      <relation group_id="uloginOptions" display_order="20"/>
-    </option>
-    <option option_id="ulogin_xf_register" edit_format="onoff" data_type="boolean" can_backup="1">
-      <default_value></default_value>
-      <edit_format_params></edit_format_params>
-      <sub_options></sub_options>
-      <relation group_id="uloginOptions" display_order="10"/>
+      <relation group_id="uloginDefaultOptions" display_order="1"/>
     </option>
   </optiongroups>
   <permissions>
@@ -45,16 +66,24 @@
     <interface_groups/>
   </permissions>
   <phrases>
-    <phrase title="option_group_uloginOptions" version_id="1" version_string="1.0"><![CDATA[uLogin]]></phrase>
-    <phrase title="option_group_uloginOptions_description" version_id="1" version_string="1.0"><![CDATA[Настройки  дополнения: uLogin]]></phrase>
-    <phrase title="option_ulogin_enable" version_id="1" version_string="1.0"><![CDATA[Включение/отключение виджета]]></phrase>
-    <phrase title="option_ulogin_enable_explain" version_id="1" version_string="1.0"><![CDATA[]]></phrase>
-    <phrase title="option_ulogin_hidden_providers" version_id="1" version_string="1.0"><![CDATA[Скрытые сервисы в дропдаун меню]]></phrase>
-    <phrase title="option_ulogin_hidden_providers_explain" version_id="1" version_string="1.0"><![CDATA[]]></phrase>
+    <phrase title="option_group_uloginDefaultOptions" version_id="2" version_string="2.0.0"><![CDATA[uLogin Default Options]]></phrase>
+    <phrase title="option_group_uloginDefaultOptions_description" version_id="2" version_string="2.0.0"><![CDATA[Настройки модуля uLogin по умолчанию]]></phrase>
+    <phrase title="option_group_uloginOptions" version_id="2" version_string="2.0.0"><![CDATA[ulogin Options]]></phrase>
+    <phrase title="option_group_uloginOptions_description" version_id="2" version_string="2.0.0"><![CDATA[Настройки модуля uLogin]]></phrase>
+    <phrase title="option_uloginID1" version_id="2" version_string="2.0.0"><![CDATA[uloginID общая форма]]></phrase>
+    <phrase title="option_uloginID1_explain" version_id="2" version_string="2.0.0"><![CDATA[Идентификатор виджета для панели авторизации. Пустое поле - виджет по умолчанию]]></phrase>
+    <phrase title="option_uLoginID2" version_id="2" version_string="2.0.0"><![CDATA[uLogin ID форма синхронизации]]></phrase>
+    <phrase title="option_uLoginID2_explain" version_id="2" version_string="2.0.0"><![CDATA[]]></phrase>
+    <phrase title="option_ulogin_display" version_id="2" version_string="2.0.0"><![CDATA[Размер панели]]></phrase>
+    <phrase title="option_ulogin_display_explain" version_id="2" version_string="2.0.0"><![CDATA[Размер панели по умолчанию]]></phrase>
+    <phrase title="option_ulogin_fields" version_id="2" version_string="2.0.0"><![CDATA[Поля]]></phrase>
+    <phrase title="option_ulogin_fields_explain" version_id="2" version_string="2.0.0"><![CDATA[Поля, возвращаемые по умолчанию]]></phrase>
+    <phrase title="option_ulogin_hidden_providers" version_id="2" version_string="2.0.0"><![CDATA[Скрытые сервисы выпадающего меню]]></phrase>
+    <phrase title="option_ulogin_hidden_providers_explain" version_id="2" version_string="2.0.0"><![CDATA[Скрытые сервисы по умолчанию]]></phrase>
+    <phrase title="option_ulogin_optional" version_id="2" version_string="2.0.0"><![CDATA[Optional]]></phrase>
+    <phrase title="option_ulogin_optional_explain" version_id="2" version_string="2.0.0"><![CDATA[Default optional]]></phrase>
     <phrase title="option_ulogin_shown_providers" version_id="1" version_string="1.0"><![CDATA[Отображаемые сервисы на панели]]></phrase>
-    <phrase title="option_ulogin_shown_providers_explain" version_id="1" version_string="1.0"><![CDATA[]]></phrase>
-    <phrase title="option_ulogin_xf_register" version_id="1" version_string="1.0"><![CDATA[Политика регистрации]]></phrase>
-    <phrase title="option_ulogin_xf_register_explain" version_id="1" version_string="1.0"><![CDATA[]]></phrase>
+    <phrase title="option_ulogin_shown_providers_explain" version_id="2" version_string="2.0.0"><![CDATA[Отображаемые сервисы по умолчанию]]></phrase>
   </phrases>
   <route_prefixes>
     <route_type type="public">
@@ -63,25 +92,18 @@
   </route_prefixes>
   <style_properties/>
   <templates>
-    <template title="ulogin" version_id="1" version_string="1.0"><![CDATA[<xen:require css="ulogin.css" />
-<xen:if is="{$xenOptions.ulogin_enable.enabled}">
-<h3 id="uLoginBar">
-<div id="uLogin" x-ulogin-params="display=small&fields=first_name,last_name,photo,email&optional=sex,bdate,country,city&providers={$xenOptions.ulogin_shown_providers}&hidden={$xenOptions.ulogin_hidden_providers}&redirect_uri={$redirect_uri}"></div>
-<script src="http://ulogin.ru/js/ulogin.js"></script>
-</h3>
-</xen:if>]]></template>
-    <template title="ulogin.css" version_id="1" version_string="1.0"><![CDATA[#loginBar #uLoginBar
-{
+    <template title="ulogin" version_id="2" version_string="2.0.0"><![CDATA[<xen:require css="ulogin.css" />
+{xen:raw $panel}]]></template>
+    <template title="ulogin.css" version_id="2" version_string="2.0.0"><![CDATA[#loginBar #uLoginBar {
 	@property "uLoginBar";
 	font-size: 11px;
 	color: #f0f7fc;
 	background-color: #032A46;
-	padding: 0 10px;
-	margin-right: 20px;
+	padding: 1px 4px 1px 10px;
 	border-bottom-right-radius: 10px; -webkit-border-bottom-right-radius:  10px; -moz-border-radius-bottomright:  10px; -khtml-border-bottom-right-radius:  10px;
 	border-bottom-left-radius: 10px; -webkit-border-bottom-left-radius:  10px; -moz-border-radius-bottomleft:  10px; -khtml-border-bottom-left-radius:  10px;
-	position: absolute;
-	right: 200px;
+	position: absolute!important;
+	right: 280px;
 	bottom: -20px;
 	text-align: center;
 	z-index: 1;
@@ -89,11 +111,23 @@
 	@property "/uLoginBar";
 }
 
-#loginBar #uLoginBar #uLogin
-{
+@media screen and (max-width: 610px) {
+#loginBar #uLoginBar {
 	@property "uLoginBar";
-	margin-top: 20px;
+	right: 20px;
+	border-radius: 10px; -webkit-border-radius:  10px; -moz-border-radius:  10px; -khtml-border-radius:  10px;
+	padding: 4px 5px 1px 10px;
+	bottom: -48px;
+	@property "/uLoginBar";
+}
+
+#loginBar #uLoginBar #uLogin {
+	@property "uLoginBar";
+	margin-top: 1px;
 	@property "/uLoginBar";
 }]]></template>
   </templates>
+  <public_template_modifications/>
+  <bb_code_media_sites/>
+  <bb_codes/>
 </addon>
