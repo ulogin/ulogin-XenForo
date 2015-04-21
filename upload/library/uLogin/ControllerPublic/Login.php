@@ -27,6 +27,7 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 			return $this->getErrorOrNoPermissionResponseException(new XenForo_Phrase('Ошибка работы uLogin:Не удалось получить данные о пользователе с помощью токена.').$this->_get_back_url());
 		}
 		$u_user = json_decode($s, true);
+
 		$u_user['nickname'] = isset($u_user['nickname']) ? $u_user['nickname'] : $u_user['nickname'] = '';
 		$check = $this->uloginCheckTokenError($u_user);
 		if (!$check)
@@ -209,6 +210,7 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 			$writer->setPassword($Password, $Password);
 			$writer->set('user_group_id', XenForo_Model_User::$defaultRegisteredGroupId);
 			$writer->set('language_id', XenForo_Visitor::getInstance()->get('language_id'));
+			$writer->set('homepage', $u_user['profile']);
 			$writer->advanceRegistrationUserState(false);
 			$writer->preSave();
 			$writer->save();
