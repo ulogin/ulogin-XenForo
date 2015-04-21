@@ -73,11 +73,11 @@ License: GNU General Public License, version 2
 
 Для использования панели авторизации в контроллерах XenForo используйте код функции
 
-	XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode();
+	XenForo_Model::create('uLogin_Model_uLoginModel')->getPanelCode();
 
 Например,
 
-	$panel = XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode(0);
+	$panel = XenForo_Model::create('uLogin_Model_uLoginModel')->getPanelCode(0);
 
 При этом необходимо передать переменную $panel в параметры шаблона, нарпимер,
 
