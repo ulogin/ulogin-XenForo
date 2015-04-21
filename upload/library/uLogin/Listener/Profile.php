@@ -8,7 +8,7 @@ class uLogin_Listener_Profile {
 		{
 			$paths = XenForo_Application::get('requestPaths');
 			$params = $template->getParams();
-			$panel = XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode();
+			$panel = XenForo_Model::create('uLogin_Model_uLoginModel')->getPanelCode();
 			$params += array('panel' => $panel);
 			$mergedParams = array_merge($params, $hookParams);
 			$uLoginTemplate = $template->create('ulogin', $mergedParams);
