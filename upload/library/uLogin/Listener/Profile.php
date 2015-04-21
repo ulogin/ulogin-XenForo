@@ -17,7 +17,7 @@ class uLogin_Listener_Profile {
 		}
 		if ($hookName == 'page_container_head')
 		{
-			$contents .= '<script src="http://ulogin.ru/js/ulogin.js"></script>';
+			$contents .= '<script src="//ulogin.ru/js/ulogin.js"></script>';
 			$contents .= '<style>.ulogin_network { display: inline-block;margin-right: 5px; }</style>';
 		}
 		if ($hookName == 'account_personal_details_status')
