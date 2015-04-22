@@ -200,7 +200,11 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 			{
 				$UserFields['gender'] = $u_user['sex'] == 1 ? 'female' : 'male';
 			}
-			$user_login = $this->ulogin_generateNickname($u_user['first_name'], $u_user['last_name'], $u_user['nickname'], $u_user['bdate']);
+			$user_login = $this->ulogin_generateNickname(
+                isset($u_user['first_name']) ? $u_user['first_name'] : '',
+                isset($u_user['last_name']) ? $u_user['last_name'] : '',
+                $u_user['nickname'],
+                $u_user['bdate']);
 			$user_pass = XenForo_Application::generateRandomString(8);
 			$UserFields['username'] = $user_login;
 			$UserFields['email'] = $u_user['email'];
