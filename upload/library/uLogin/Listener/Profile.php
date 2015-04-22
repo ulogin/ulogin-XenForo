@@ -25,7 +25,7 @@ class uLogin_Listener_Profile {
 			global $fileDir;
 			$visitor = XenForo_Visitor::getInstance();
 			$current_user = $visitor['user_id'];
-			$panel = XenForo_Model::create('uLogin_Model_uloginModel')->getPanelCode(1);
+			$panel = XenForo_Model::create('uLogin_Model_uLoginModel')->getPanelCode(1);
 			if ($current_user > 0)
 			{
 				$syncpanel = uLogin_Listener_Profile::getuLoginUserAccountsPanel();
