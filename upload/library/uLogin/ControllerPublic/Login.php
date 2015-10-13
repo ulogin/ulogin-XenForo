@@ -36,7 +36,7 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 		}
 		$uLoginModel = XenForo_Model_User::create('uLogin_Model_User');
 		$user_id = $uLoginModel->getUserIdByIdentity($u_user['identity']);
-		if (isset($user_id))
+		if (isset($user_id) && !empty($user_id))
 		{
 			$xf_user = $uLoginModel->getXenForoUser($user_id);
 			if ($user_id > 0 && $xf_user > 0) $this->uloginCheckUserId($user_id);
