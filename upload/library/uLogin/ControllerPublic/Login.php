@@ -36,11 +36,11 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 		}
 		$uLoginModel = XenForo_Model_User::create('uLogin_Model_User');
 		$user_id = $uLoginModel->getUserIdByIdentity($u_user['identity']);
-		$user_id = $user_id['user_id'];
+		$user_id = $user_id['userid'];
 		if (isset($user_id) && !empty($user_id))
 		{
 			$xf_user = $uLoginModel->getXenForoUser($user_id);
-			if ($user_id > 0 && $xf_user > 0) $this->uloginCheckUserId($user_id);
+			if ($user_id > 0 && $xf_user['user_id'] > 0) $this->uloginCheckUserId($user_id);
 			else
 				$user_id = $this->uloginRegistrationUser($u_user, 1);
 		}
@@ -204,10 +204,10 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 				$UserFields['gender'] = $u_user['sex'] == 1 ? 'female' : 'male';
 			}
 			$user_login = $this->ulogin_generateNickname(
-                isset($u_user['first_name']) ? $u_user['first_name'] : '',
-                isset($u_user['last_name']) ? $u_user['last_name'] : '',
-                $u_user['nickname'],
-                $u_user['bdate']);
+				isset($u_user['first_name']) ? $u_user['first_name'] : '',
+				isset($u_user['last_name']) ? $u_user['last_name'] : '',
+				$u_user['nickname'],
+				$u_user['bdate']);
 			$user_pass = XenForo_Application::generateRandomString(8);
 			$UserFields['username'] = $user_login;
 			$UserFields['email'] = $u_user['email'];
@@ -223,14 +223,12 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 			$writer->save();
 			$user = $writer->getMergedData();
 			$ul_writer = uLogin_DataWriter_User::create('uLogin_DataWriter_User');
-			$ul_writer->set('userid', $user);
+			$ul_writer->set('userid', $user['user_id']);
 			$ul_writer->set('identity', $u_user['identity']);
 			$ul_writer->set('network', $u_user['network']);
 			$ul_writer->save();
 
-			XenForo_Model_Ip::log($user, 'user', $user, 'register');
-			XenForo_Application::get('session')->changeUserId($user);
-			XenForo_Visitor::setup($user);
+			XenForo_Model_Ip::log($user['user_id'], 'user', $user['user_id'], 'register');
 
 			if(XenForo_Application::getOptions()->uLoginEmail == 1) {
 				$this->sendEmail($user);
@@ -245,6 +243,7 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 		}
 		else
 		{ // существует пользователь с таким email или это текущий пользователь
+
 			if (!isset($u_user["verified_email"]) || intval($u_user["verified_email"]) != 1)
 			{
 				throw $this->getErrorOrNoPermissionResponseException('<script src="//ulogin.ru/js/ulogin.js"  type="text/javascript"></script><script type="text/javascript">uLogin.mergeAccounts("'.$_POST['token'].'")</script>'.new XenForo_Phrase("Электронный адрес данного аккаунта совпадает с электронным адресом существующего пользователя. Требуется подтверждение на владение указанным email.".$this->_get_back_url()));
@@ -255,7 +254,7 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 				$user_id = $is_logged_in ? $current_user : $user_id;
 				$uLoginModel = XenForo_Model_User::create('uLogin_Model_User');
 				$other_u = $uLoginModel->getIdentityByUserId($user_id);
-				if ($other_u)
+				if ($other_u['identity'])
 				{
 					if (!$is_logged_in && !isset($u_user['merge_account']))
 					{
@@ -268,13 +267,6 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 				$ul_writer->set('identity', $u_user['identity']);
 				$ul_writer->set('network', $u_user['network']);
 				$ul_writer->save();
-
-				$userModel = $this->_getUserModel();
-				XenForo_Model_Ip::log($user_id, 'user', $user_id, 'login');
-				$userModel->deleteSessionActivity(0, $this->_request->getClientIp(false));
-				$session = XenForo_Application::get('session');
-				$session->changeUserId($user_id);
-				XenForo_Visitor::setup($user_id);
 				return $user_id;
 			}
 		}
