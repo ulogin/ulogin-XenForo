@@ -36,6 +36,7 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 		}
 		$uLoginModel = XenForo_Model_User::create('uLogin_Model_User');
 		$user_id = $uLoginModel->getUserIdByIdentity($u_user['identity']);
+		$user_id = $user_id['user_id'];
 		if (isset($user_id) && !empty($user_id))
 		{
 			$xf_user = $uLoginModel->getXenForoUser($user_id);
@@ -180,6 +181,7 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 		$uLoginModel = XenForo_Model_User::create('uLogin_Model_User');
 		if ($in_db == 1) $abb = $uLoginModel->deleteUloginUser($u_user['identity']);
 		$user_id = $uLoginModel->getUserByEmail($u_user['email']);
+		$user_id = $user_id['user_id'];
 		// $check_m_user == true -> есть пользователь с таким email
 		$check_m_user = $user_id > 0 ? true : false;
 		$visitor = XenForo_Visitor::getInstance();
@@ -221,14 +223,14 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 			$writer->save();
 			$user = $writer->getMergedData();
 			$ul_writer = uLogin_DataWriter_User::create('uLogin_DataWriter_User');
-			$ul_writer->set('userid', $user['user_id']);
+			$ul_writer->set('userid', $user);
 			$ul_writer->set('identity', $u_user['identity']);
 			$ul_writer->set('network', $u_user['network']);
 			$ul_writer->save();
 
-			XenForo_Model_Ip::log($user['user_id'], 'user', $user['user_id'], 'register');
-			XenForo_Application::get('session')->changeUserId($user['user_id']);
-			XenForo_Visitor::setup($user['user_id']);
+			XenForo_Model_Ip::log($user, 'user', $user, 'register');
+			XenForo_Application::get('session')->changeUserId($user);
+			XenForo_Visitor::setup($user);
 
 			if(XenForo_Application::getOptions()->uLoginEmail == 1) {
 				$this->sendEmail($user);
@@ -262,17 +264,17 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 				}
 
 				$ul_writer = uLogin_DataWriter_User::create('uLogin_DataWriter_User');
-				$ul_writer->set('userid', $user_id['user_id']);
+				$ul_writer->set('userid', $user_id);
 				$ul_writer->set('identity', $u_user['identity']);
 				$ul_writer->set('network', $u_user['network']);
 				$ul_writer->save();
 
 				$userModel = $this->_getUserModel();
-				XenForo_Model_Ip::log($user_id['user_id'], 'user', $user_id['user_id'], 'login');
+				XenForo_Model_Ip::log($user_id, 'user', $user_id, 'login');
 				$userModel->deleteSessionActivity(0, $this->_request->getClientIp(false));
 				$session = XenForo_Application::get('session');
-				$session->changeUserId($user_id['user_id']);
-				XenForo_Visitor::setup($user_id['user_id']);
+				$session->changeUserId($user_id);
+				XenForo_Visitor::setup($user_id);
 				return $user_id;
 			}
 		}
@@ -301,8 +303,7 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 	{
 		$uLoginModel = XenForo_Model_User::create('uLogin_Model_User');
 		$userId = $uLoginModel->getUserById($id_customer);
-
-		if ($userId['userid'])
+		if ($userId)
 		{
 			$userModel = $this->_getUserModel();
 			XenForo_Model_Ip::log($userId['userid'], 'user', $userId['userid'], 'login');
