@@ -95,6 +95,7 @@ class uLogin_ControllerPublic_Login extends XenForo_ControllerPublic_Login {
 			{
 				$c = curl_init($request);
 				curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($c, CURLOPT_FOLLOWLOCATION, 1);
 				$response = curl_exec($c);
 				curl_close($c);
 			}
