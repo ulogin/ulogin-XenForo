@@ -1,10 +1,10 @@
 ﻿# uLogin
 
-Donate link: http://ulogin.ru
-Tags: ulogin, login, social, authorization
-Requires at least: 1.2
-Tested up to: 1.4.5
-Stable tag: 2.0
+Donate link: http://ulogin.ru  
+Tags: ulogin, login, social, authorization  
+Requires at least: 1.2  
+Tested up to: 1.4.5  
+Stable tag: 2.0  
 License: GNU General Public License, version 2
 
 **uLogin** — это инструмент, который позволяет пользователям получить единый доступ к различным Интернет-сервисам без необходимости повторной регистрации,
@@ -36,9 +36,8 @@ License: GNU General Public License, version 2
 
 Здесь задаются:
 
-**uLogin ID общая форма:** общее поле для всех виджетов uLogin, необязательный параметр (см. *"Настройки виджета uLogin"*);
-
-**uLogin ID форма синхронизации:** поле для всех виджетов синхронизации uLogin, необязательный параметр (см. *"Настройки виджета uLogin"*);
+**uLogin ID общая форма:** общее поле для всех виджетов uLogin, необязательный параметр (см. *"Настройки виджета uLogin"*);  
+**uLogin ID форма синхронизации:** поле для всех виджетов синхронизации uLogin, необязательный параметр (см. *"Настройки виджета uLogin"*);  
 
 
 ## Настройки виджета uLogin
