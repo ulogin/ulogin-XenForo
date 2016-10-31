@@ -133,6 +133,7 @@
 	@property "uLoginBar";
 	margin-top: 1px;
 	@property "/uLoginBar";
+}
 }]]></template>
   </templates>
   <public_template_modifications/>
